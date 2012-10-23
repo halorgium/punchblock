@@ -1,5 +1,6 @@
 # [develop](https://github.com/adhearsion/punchblock)
   * Bugfix: Use correct GRXML content type
+  * Bugfix: Avoid a race condition in re-registering outbound calls when we discover their full channel name. This was manifesting as duplicate outbound calls.
 
 # [v1.5.1](https://github.com/adhearsion/punchblock/compare/v1.5.0...v1.5.1) - [2012-10-11](https://rubygems.org/gems/punchblock/versions/1.5.1)
   * Update: Bump Celluloid dependency

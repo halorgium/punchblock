@@ -30,8 +30,8 @@ module Punchblock
         @fully_booted_count = 0
       end
 
-      def register_call(call)
-        @channel_to_call_id[call.channel] = call.id
+      def register_call(call, channel = nil)
+        @channel_to_call_id[channel || call.channel] = call.id
         @calls[call.id] ||= call
       end
 
@@ -74,7 +74,7 @@ module Punchblock
           return
         end
 
-        handle_varset_ami_event event
+        handle_varset_ami_event event if event.name == 'VarSet' && event['Variable'] == 'punchblock_call_id'
 
         ami_dispatch_to_or_create_call event
 
@@ -168,11 +168,12 @@ module Punchblock
       private
 
       def handle_varset_ami_event(event)
-        return unless event.name == 'VarSet' && event['Variable'] == 'punchblock_call_id' && (call = call_with_id event['Value'])
+        call = call_with_id event['Value']
+        return unless call
 
         @channel_to_call_id.delete call.channel
         call.channel = event['Channel']
-        register_call call
+        register_call call, event['Channel']
       end
 
       def ami_dispatch_to_or_create_call(event)
