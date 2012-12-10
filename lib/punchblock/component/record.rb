@@ -4,6 +4,7 @@ module Punchblock
   module Component
     class Record < ComponentNode
       register :record, :record
+      attr_accessor :interrupting_digit
 
       ##
       # Creates an Rayo Record command

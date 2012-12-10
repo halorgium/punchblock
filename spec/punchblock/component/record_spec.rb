@@ -25,6 +25,7 @@ module Punchblock
         its(:max_duration)    { should be == 500000 }
         its(:initial_timeout) { should be == 10000 }
         its(:final_timeout)   { should be == 30000 }
+        its(:interrupting_digit)   { should be_nil }
       end
 
       describe "from a stanza" do
@@ -205,6 +206,18 @@ module Punchblock
             it "should raise an error" do
               lambda { command.stop! }.should raise_error(InvalidActionError, "Cannot stop a Record that is not executing")
             end
+          end
+        end
+
+        describe "#interrupting_digit" do
+          before do
+            command.request!
+            command.execute!
+          end
+
+          it "should allow setting and getting the property" do
+            subject.interrupting_digit = "#"
+            subject.interrupting_digit.should == "#"
           end
         end
       end
